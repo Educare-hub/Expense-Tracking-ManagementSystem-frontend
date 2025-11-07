@@ -1,6 +1,6 @@
 import taskManager from '../../assets/images/tasks-manager.png';
 
-const About = () => {
+const Intro = () => {
     return (
         <div>
             <div className="flex flex-col md:flex-row justify-between gap-8 h-fit p-4 md:p-8">
@@ -33,4 +33,4 @@ const About = () => {
     )
 }
 
-export default About
+export default Intro
