@@ -9,12 +9,10 @@ type Testimonial = {
     content: string;
 };
 
-// Resize helper function for uniform smaller image display
 const resizeImage = (src: string, width: number, height: number) => {
     return Object.assign(new Image(), { src, width, height });
 };
 
-// Adjusted image sizes (same proportions, smaller display footprint)
 const story1Small = resizeImage(story1, 400, 260);
 const story2Small = resizeImage(story2, 400, 260);
 

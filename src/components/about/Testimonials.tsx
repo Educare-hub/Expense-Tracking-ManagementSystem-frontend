@@ -4,12 +4,10 @@ const Testimonials = () => {
   return (
     <section className="py-20 bg-gradient-to-tr from-[#0f2027] via-[#203a43] to-[#2c5364] text-white">
       <div className="max-w-6xl mx-auto px-6">
-        {/* Section Title */}
         <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-500 bg-clip-text text-transparent drop-shadow-lg">
           What Our Users Say
         </h2>
 
-        {/* Testimonials Grid */}
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
           {testimonialsData.map((testimonial) => (
             <div

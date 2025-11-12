@@ -69,7 +69,6 @@ export const testimonialsData: Testimonial[] = [
   },
 ];
 
-// ✅ Add this component wrapper
 const Intro: React.FC = () => {
   return (
     <section className="intro-section">
@@ -92,5 +91,4 @@ const Intro: React.FC = () => {
   );
 };
 
-// ✅ Default export to fix import in AboutPage.tsx
 export default Intro;
