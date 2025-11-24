@@ -1,4 +1,28 @@
+/* src/index.css — TAILWIND v4 + DAISYUI — FINAL WORKING VERSION */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
-@plugin "daisyui"{
-    themes: light --default
+@plugin "daisyui";
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-black via-gray-900 to-purple-900 min-h-screen text-white font-sans antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-['Cinzel'] tracking-tight text-amber-400;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-2xl;
+  }
+  .glass-gold {
+    @apply bg-gradient-to-br from-amber-600/20 to-yellow-600/20 border border-amber-500/30 backdrop-blur-xl rounded-3xl shadow-2xl;
+  }
+  .text-gold { @apply text-amber-400; }
+  .btn-premium {
+    @apply bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-black font-bold shadow-2xl transform hover:scale-105 transition-all duration-300 rounded-full px-10 py-5 text-lg;
+  }
 }

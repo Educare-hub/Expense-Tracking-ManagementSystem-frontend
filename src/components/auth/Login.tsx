@@ -1,9 +1,16 @@
-import Navbar from "../nav/Navbar";
+// src/components/auth/Login.tsx
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import api from "../../api/client";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux"; // ← ADDED
+import { setAuthSuccess } from "../../features/auth/authSlice"; // ← ADDED
+import Navbar from "../nav/Navbar";
+import { motion } from "framer-motion";
+import toast from "react-hot-toast";
+import type { FieldValues } from "react-hook-form";
 
 type LoginInputs = {
   email: string;
@@ -15,8 +22,10 @@ const schema = yup.object({
   password: yup.string().min(6).required("Password is required"),
 });
 
-export const Login = () => {
+const Login = () => {
   const [message, setMessage] = useState("");
+  const dispatch = useDispatch(); // ← ADDED
+  const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm<LoginInputs>({
     resolver: yupResolver(schema),
   });
@@ -24,68 +33,102 @@ export const Login = () => {
   const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
     try {
       const res = await api.post("/auth/login", data);
-      localStorage.setItem("token", res.data.token);
-      setMessage("Login successful!");
+
+      // Needs verification (first time)
+      if (res.data.requiresVerification) {
+        toast.success("Verification code sent to your email");
+        navigate("/auth/verify", { state: { email: data.email } });
+        return;
+      }
+
+      // Already verified → SUCCESS LOGIN
+      if (res.data.token && res.data.user) {
+        // Save to localStorage
+        localStorage.setItem("expensepro_token", res.data.token);
+        localStorage.setItem("role", res.data.user.role.toLowerCase());
+        // After successful login — ADD THIS LINE
+        localStorage.setItem("token", res.data.token);
+        console.log("TOKEN SAVED:", res.data.token);
+
+
+        // Update Redux state IMMEDIATELY
+        dispatch(setAuthSuccess({
+          token: res.data.token,
+          user: res.data.user
+        }));
+
+        toast.success("Welcome back to your financial tracker!");
+
+        // Instant redirect — no delay
+        if (res.data.user.role.toLowerCase() === "admin") {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/user/dashboard");
+        }
+      }
     } catch (err: any) {
-      setMessage(err.response?.data?.message || "Login failed.");
+      const errorMsg = err.response?.data?.error || err.response?.data?.message || "Invalid email or password";
+      toast.error(errorMsg);
+      setMessage(errorMsg);
     }
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-purple-900">
       <Navbar />
-      <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-sky-200 via-white to-cyan-100 p-6">
-        <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-2xl border border-gray-200">
-          <h1 className="text-3xl font-extrabold text-center text-gray-700 mb-6">
-            Welcome Back
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex justify-center items-center min-h-[calc(100vh-80px)] p-6"
+      >
+        <div className="glass-gold p-10 w-full max-w-md rounded-3xl">
+          <h1 className="text-4xl font-bold text-center text-gold mb-6 font-['Cinzel']">
+            Enter Your Dashboard
           </h1>
-          <p className="text-center text-gray-500 mb-8">
-            Log in to continue managing your finances
+          <p className="text-center text-white/80 mb-8">
+            Access your private financial dashboard
           </p>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            <div>
-              <input
-                type="email"
-                {...register("email")}
-                placeholder="Email address"
-                className="w-full p-3 rounded-lg border border-gray-300 text-gray-800 bg-gray-50 focus:outline-none focus:ring-4 focus:ring-sky-300"
-              />
-              {errors.email && <span className="text-red-600 text-sm">{errors.email.message}</span>}
-            </div>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <input
+              type="email"
+              {...register("email")}
+              placeholder="Email address"
+              className="w-full p-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-amber-400"
+            />
+            {errors.email && <span className="text-red-400 text-sm">{errors.email.message}</span>}
 
-            <div>
-              <input
-                type="password"
-                {...register("password")}
-                placeholder="Password"
-                className="w-full p-3 rounded-lg border border-gray-300 text-gray-800 bg-gray-50 focus:outline-none focus:ring-4 focus:ring-sky-300"
-              />
-              {errors.password && <span className="text-red-600 text-sm">{errors.password.message}</span>}
-            </div>
+            <input
+              type="password"
+              {...register("password")}
+              placeholder="Password"
+              className="w-full p-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-amber-400"
+            />
+            {errors.password && <span className="text-red-400 text-sm">{errors.password.message}</span>}
 
             <button
               type="submit"
-              className="w-full py-3 mt-4 text-lg font-semibold text-white rounded-lg bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-600 hover:opacity-90 transition-all shadow-md"
+              className="btn-premium w-full py-4 text-lg font-semibold rounded-xl"
             >
-              Login
+              Secure Login
             </button>
 
-            {message && (
-              <p className="text-center text-sky-700 font-medium mt-3">
-                {message}
-              </p>
-            )}
+            <p className="text-center text-white/70 mt-4">
+              <a href="/auth/forgot-password" className="text-amber-400 hover:underline font-medium">
+                Forgot Password?
+              </a>
+            </p>
+
+            {message && <p className="text-center text-red-400 font-medium mt-4">{message}</p>}
           </form>
 
-          <p className="text-center text-gray-500 mt-6">
-            Don’t have an account?{" "}
-            <a href="/register" className="text-sky-600 font-semibold hover:underline">
-              Register
-            </a>
+          <p className="text-center text-white/80 mt-6">
+            New to ExpensePro? <a href="/auth/register" className="text-amber-400 font-semibold hover:underline">Create Account</a>
           </p>
         </div>
-      </div>
-    </>
+      </motion.div>
+    </div>
   );
 };
+
+export default Login;

@@ -1,12 +1,39 @@
+//src/components/nav/Navbar.tsx
+
 import { FaBars } from "react-icons/fa";
-import { NavLink } from "react-router";
+import { NavLink } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import type { RootState } from '../../app/store';
+
+import { logout } from "../../features/auth/authSlice";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+
+  // Get state from Redux:
+  const { user, token } = useSelector((state: RootState) => state.auth);
+
+  const handleLogout = () => {
+  dispatch(logout());
+  localStorage.removeItem("expensepro_token");
+  localStorage.removeItem("token");
+};
+
+  // Determine dashboard link based on role
+  const dashboardLink =
+    user?.role === "admin"
+      ? "/admin/dashboard"
+      : user?.role === "user"
+      ? "/user/dashboard"
+      : "/login";
+
   return (
     <div className="bg-gradient-to-tr from-cyan-400 via-teal-500 to-blue-600 text-white shadow-md">
       <div className="navbar container mx-auto">
-        {/* Navbar Start */}
+
+        {/* NAVBAR START */}
         <div className="navbar-start">
+          {/* Mobile dropdown */}
           <div className="dropdown">
             <div
               tabIndex={0}
@@ -15,33 +42,64 @@ const Navbar = () => {
             >
               <FaBars />
             </div>
+
             <ul
               tabIndex={-1}
-              className="menu menu-sm dropdown-content bg-gradient-to-tr from-cyan-400 via-teal-500 to-blue-600 text-white rounded-box z-10 mt-3 w-52 p-2 shadow"
+              className="menu menu-sm dropdown-content bg-gradient-to-tr 
+                        from-cyan-400 via-teal-500 to-blue-600 text-white 
+                        rounded-box z-10 mt-3 w-52 p-2 shadow"
             >
               <li><NavLink to="/">Home</NavLink></li>
               <li><NavLink to="/about">About</NavLink></li>
-              <li><NavLink to="/">Dashboard</NavLink></li>
-              <li><NavLink to="/register">Register</NavLink></li>
-              <li><NavLink to="/login">Login</NavLink></li>
+              <li><NavLink to={dashboardLink}>Dashboard</NavLink></li>
+              <li><NavLink to="/services">Services</NavLink></li>
+
+
+              {!token && (
+                <>
+                  <li><NavLink to="/auth/register">Register</NavLink></li>
+                  <li><NavLink to="/auth/login">Login</NavLink></li>
+                </>
+              )}
+
+              {token && (
+                <li>
+                  <button onClick={handleLogout}>Logout</button>
+                </li>
+              )}
             </ul>
           </div>
         </div>
 
-        {/* Center Links (Desktop Only) */}
+        {/* NAVBAR CENTER (desktop) */}
         <div className="navbar-center hidden md:flex">
           <ul className="menu menu-horizontal px-1 text-white font-medium">
             <li><NavLink to="/">Home</NavLink></li>
             <li><NavLink to="/about">About</NavLink></li>
-            <li><NavLink to="/">Dashboard</NavLink></li>
+            <li><NavLink to="/services">Services</NavLink></li>
+            <li><NavLink to={dashboardLink}>Dashboard</NavLink></li>
           </ul>
         </div>
 
-        {/* Right Links (Desktop Only) */}
+        {/* NAVBAR END (desktop) */}
         <div className="navbar-end hidden md:flex">
           <ul className="menu menu-horizontal px-1 text-white font-medium">
-            <li><NavLink to="/register">Register</NavLink></li>
-            <li><NavLink to="/login">Login</NavLink></li>
+
+            {!token && (
+              <>
+                <li><NavLink to="/auth/register">Register</NavLink></li>
+                <li><NavLink to="/auth/login">Login</NavLink></li>
+
+              </>
+            )}
+
+            {token && (
+              <li>
+                <button onClick={handleLogout} className="btn btn-sm btn-ghost">
+                  Logout
+                </button>
+              </li>
+            )}
           </ul>
         </div>
       </div>

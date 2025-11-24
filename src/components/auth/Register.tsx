@@ -1,9 +1,14 @@
+//src/components/auth/Register.tsx
+
 import Navbar from "../nav/Navbar";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import api from "../../api/client";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 type RegisterInputs = {
   first_name: string;
@@ -19,7 +24,7 @@ const schema = yup.object({
   last_name: yup.string().max(50).required("Last name is required"),
   email: yup.string().email("Invalid email").max(100).required("Email is required"),
   phone_number: yup.string().max(20).required("Phone number is required"),
-  password: yup.string().min(6).max(255).required("Password is required"),
+  password: yup.string().min(6, "Password must be at least 6 characters").max(255).required("Password is required"),
   confirmPassword: yup
     .string()
     .oneOf([yup.ref("password")], "Passwords must match")
@@ -27,111 +32,220 @@ const schema = yup.object({
 });
 
 export const Register = () => {
-  const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  
   const { register, handleSubmit, formState: { errors } } = useForm<RegisterInputs>({
     resolver: yupResolver(schema),
   });
 
   const onSubmit: SubmitHandler<RegisterInputs> = async (data) => {
+    setIsLoading(true);
+    
     try {
+      // Store email in localStorage BEFORE making the API call
+      const emailToStore = data.email.toLowerCase().trim();
+      localStorage.setItem("pending_verification_email", emailToStore);
+      console.log("Stored email in localStorage:", emailToStore);
+      console.log("Verify storage:", localStorage.getItem("pending_verification_email"));
+      
       const res = await api.post("/auth/register", data);
-      setMessage(res.data.message || "Registration successful!");
+      
+      // Log the ENTIRE response
+      console.log("Registration SUCCESS - Full response:", {
+        status: res.status,
+        data: res.data,
+        headers: res.headers
+      });
+      
+      // Show success message
+      toast.success("Registration successful! Check your email for the verification code.");
+      
+      // Double-check localStorage before navigation
+      const storedEmail = localStorage.getItem("pending_verification_email");
+      console.log("Email in storage before navigation:", storedEmail);
+      
+      // Navigate to verification page IMMEDIATELY (no setTimeout)
+      const verifyURL = `/auth/verify?email=${encodeURIComponent(emailToStore)}`;
+      console.log("Navigating to:", verifyURL);
+      navigate(verifyURL);
+
     } catch (err: any) {
-      setMessage(err.response?.data?.message || "Registration failed.");
+      // DEBUG: Log the ENTIRE error
+      console.error("Registration FAILED - Full error:", {
+        status: err.response?.status,
+        data: err.response?.data,
+        message: err.message
+      });
+      
+      console.error("Registration error:", err.response?.data);
+      
+      const backendMessage = err.response?.data?.error || err.response?.data?.message;
+
+      // Handle specific error cases
+      if (backendMessage?.toLowerCase().includes("already exists") || 
+          backendMessage?.toLowerCase().includes("duplicate") || 
+          backendMessage?.toLowerCase().includes("unique")) {
+        toast.error("This email is already registered. Please log in instead.");
+      } else if (backendMessage) {
+        toast.error(backendMessage);
+      } else {
+        toast.error("Registration failed. Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-purple-900">
       <Navbar />
-      <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-sky-200 via-white to-cyan-100 p-6">
-        <div className="w-full max-w-xl bg-white rounded-2xl shadow-2xl border border-gray-200 p-8">
-          <h1 className="text-3xl font-extrabold text-center text-gray-700 mb-6">
-            Create an Account
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="flex justify-center items-center min-h-[calc(100vh-80px)] p-6"
+      >
+        <div className="glass-gold w-full max-w-2xl p-10 rounded-3xl">
+          <h1 className="text-4xl font-bold text-center text-gold mb-4 font-['Cinzel']">
+            Join the ExpensePro Community
           </h1>
-          <p className="text-center text-gray-500 mb-8">
-            Join ExpensePro and take control of your finances today!
+          <p className="text-center text-white/80 mb-8">
+            Create your ExpensePro account and master your finances
           </p>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            {/* Name Fields */}
             <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <input
                   type="text"
                   {...register("first_name")}
                   placeholder="First Name"
-                  className="w-full p-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-800 focus:outline-none focus:ring-4 focus:ring-sky-300"
+                  disabled={isLoading}
+                  className="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:opacity-50 disabled:cursor-not-allowed"
                 />
-                {errors.first_name && <span className="text-sm text-red-600">{errors.first_name.message}</span>}
+                {errors.first_name && (
+                  <span className="text-red-400 text-sm block mt-1">
+                    {errors.first_name.message}
+                  </span>
+                )}
               </div>
               <div>
                 <input
                   type="text"
                   {...register("last_name")}
                   placeholder="Last Name"
-                  className="w-full p-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-800 focus:outline-none focus:ring-4 focus:ring-sky-300"
+                  disabled={isLoading}
+                  className="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:opacity-50 disabled:cursor-not-allowed"
                 />
-                {errors.last_name && <span className="text-sm text-red-600">{errors.last_name.message}</span>}
+                {errors.last_name && (
+                  <span className="text-red-400 text-sm block mt-1">
+                    {errors.last_name.message}
+                  </span>
+                )}
               </div>
             </div>
 
-            <input
-              type="email"
-              {...register("email")}
-              placeholder="Email"
-              className="w-full p-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-800 focus:outline-none focus:ring-4 focus:ring-sky-300"
-            />
-            {errors.email && <span className="text-sm text-red-600">{errors.email.message}</span>}
+            {/* Email Field */}
+            <div>
+              <input
+                type="email"
+                {...register("email")}
+                placeholder="Email Address"
+                disabled={isLoading}
+                className="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:opacity-50 disabled:cursor-not-allowed"
+              />
+              {errors.email && (
+                <span className="text-red-400 text-sm block mt-1">
+                  {errors.email.message}
+                </span>
+              )}
+            </div>
 
-            <input
-              type="text"
-              {...register("phone_number")}
-              placeholder="Phone Number"
-              className="w-full p-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-800 focus:outline-none focus:ring-4 focus:ring-sky-300"
-            />
-            {errors.phone_number && <span className="text-sm text-red-600">{errors.phone_number.message}</span>}
+            {/* Phone Field */}
+            <div>
+              <input
+                type="text"
+                {...register("phone_number")}
+                placeholder="Phone Number"
+                disabled={isLoading}
+                className="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:opacity-50 disabled:cursor-not-allowed"
+              />
+              {errors.phone_number && (
+                <span className="text-red-400 text-sm block mt-1">
+                  {errors.phone_number.message}
+                </span>
+              )}
+            </div>
 
+            {/* Password Fields */}
             <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <input
                   type="password"
                   {...register("password")}
-                  placeholder="Password"
-                  className="w-full p-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-800 focus:outline-none focus:ring-4 focus:ring-sky-300"
+                  placeholder="Password (min 6 chars)"
+                  disabled={isLoading}
+                  className="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:opacity-50 disabled:cursor-not-allowed"
                 />
-                {errors.password && <span className="text-sm text-red-600">{errors.password.message}</span>}
+                {errors.password && (
+                  <span className="text-red-400 text-sm block mt-1">
+                    {errors.password.message}
+                  </span>
+                )}
               </div>
               <div>
                 <input
                   type="password"
                   {...register("confirmPassword")}
                   placeholder="Confirm Password"
-                  className="w-full p-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-800 focus:outline-none focus:ring-4 focus:ring-sky-300"
+                  disabled={isLoading}
+                  className="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:opacity-50 disabled:cursor-not-allowed"
                 />
-                {errors.confirmPassword && <span className="text-sm text-red-600">{errors.confirmPassword.message}</span>}
+                {errors.confirmPassword && (
+                  <span className="text-red-400 text-sm block mt-1">
+                    {errors.confirmPassword.message}
+                  </span>
+                )}
               </div>
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
-              className="w-full py-3 mt-4 text-lg font-semibold text-white rounded-lg bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-600 hover:opacity-90 transition-all shadow-md"
+              disabled={isLoading}
+              className={`btn-premium w-full py-4 text-lg font-semibold rounded-xl ${
+                isLoading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             >
-              Register
+              {isLoading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  Creating Your Dashboard...
+                </span>
+              ) : (
+                "Create Account"
+              )}
             </button>
-
-            {message && (
-              <p className="text-center text-sky-700 font-medium mt-3">{message}</p>
-            )}
           </form>
 
-          <p className="text-center text-gray-500 mt-6">
+          {/* Login Link */}
+          <p className="text-center text-white/80 mt-6">
             Already have an account?{" "}
-            <a href="/login" className="text-sky-600 font-semibold hover:underline">
+            <a 
+              href="/auth/login" 
+              className="text-amber-400 font-semibold hover:underline"
+            >
               Login
             </a>
           </p>
         </div>
-      </div>
-    </>
+      </motion.div>
+    </div>
   );
 };
+
+export default Register;

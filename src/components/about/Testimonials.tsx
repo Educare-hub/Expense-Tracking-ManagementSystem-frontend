@@ -1,3 +1,5 @@
+//src/components/about/Testimonials.tsx
+
 import { testimonialsData } from "./testimonialdata";
 
 const Testimonials = () => {

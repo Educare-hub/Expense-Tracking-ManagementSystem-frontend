@@ -1,6 +1,23 @@
+//src/components/Services.tsx
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import type { RootState } from "../app/store";
 import serviceIMG from "../assets/images/services.jpg";
 
 export const Services = () => {
+  const navigate = useNavigate();
+  const token = useSelector((s: RootState) => s.auth.token);
+
+  const handleGetStarted = () => {
+    if (token) {
+      // If logged in, go to dashboard
+      navigate("/dashboard");
+    } else {
+      // If not logged in, go to register
+      navigate("/auth/register");
+    }
+  };
+
   return (
     <section className="bg-gradient-to-tr from-[#0f2027] via-[#203a43] to-[#2c5364] text-white py-16 px-6 md:px-12">
       <div className="flex flex-col md:flex-row items-stretch justify-between gap-10">
@@ -61,8 +78,11 @@ export const Services = () => {
           </div>
 
           {/* CTA Button */}
-          <button className="mt-6 px-6 py-3 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-full font-semibold text-white shadow-lg hover:scale-105 transition-transform duration-300">
-            Get Started
+          <button 
+            onClick={handleGetStarted}
+            className="mt-6 px-6 py-3 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-full font-semibold text-white shadow-lg hover:scale-105 transition-transform duration-300"
+          >
+            {token ? "Go to Dashboard" : "Get Started"}
           </button>
         </div>
       </div>

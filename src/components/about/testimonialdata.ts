@@ -1,3 +1,5 @@
+//src/components/about/testimonialdata.ts
+
 import story1 from '../../assets/images/story1.jpg';
 import story2 from '../../assets/images/story2.jpg';
 

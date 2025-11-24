@@ -1,6 +1,23 @@
+//src/components/Hero.tsx
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import type { RootState } from "../app/store";
 import homeIMG from "../assets/images/home-image.jpg";
 
 export const Hero = () => {
+  const navigate = useNavigate();
+  const token = useSelector((s: RootState) => s.auth.token);
+
+  const handleGetStarted = () => {
+    if (token) {
+      // If logged in, go to dashboard
+      navigate("/dashboard");
+    } else {
+      // If not logged in, go to register
+      navigate("/auth/register");
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col md:flex-row justify-between items-stretch gap-10 min-h-[80vh] p-6 md:p-12 bg-gradient-to-tr from-[#0f2027] via-[#203a43] to-[#2c5364] text-white">
@@ -22,8 +39,11 @@ export const Hero = () => {
             Get started today and take the first step towards smarter financial management!
           </p>
 
-          <button className="self-start px-6 py-3 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-full font-semibold text-white shadow-lg hover:scale-105 transition-transform duration-300">
-            Get Started
+          <button 
+            onClick={handleGetStarted}
+            className="self-start px-6 py-3 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-full font-semibold text-white shadow-lg hover:scale-105 transition-transform duration-300"
+          >
+            {token ? "Go to Dashboard" : "Get Started"}
           </button>
         </div>
 
