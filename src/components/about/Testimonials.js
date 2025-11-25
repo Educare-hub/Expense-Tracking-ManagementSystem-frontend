@@ -1,0 +1,7 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+//src/components/about/Testimonials.tsx
+import { testimonialsData } from "./testimonialdata";
+const Testimonials = () => {
+    return (_jsx("section", { className: "py-20 bg-gradient-to-tr from-[#0f2027] via-[#203a43] to-[#2c5364] text-white", children: _jsxs("div", { className: "max-w-6xl mx-auto px-6", children: [_jsx("h2", { className: "text-4xl md:text-5xl font-extrabold text-center mb-12 bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-500 bg-clip-text text-transparent drop-shadow-lg", children: "What Our Users Say" }), _jsx("div", { className: "grid gap-10 md:grid-cols-2 lg:grid-cols-3", children: testimonialsData.map((testimonial) => (_jsxs("div", { className: "bg-white/10 backdrop-blur-md rounded-2xl shadow-lg p-8 flex flex-col items-center text-center border border-white/20 hover:shadow-cyan-400/40 hover:scale-105 transition-all duration-500", children: [_jsx("img", { src: testimonial.image, alt: testimonial.name, className: "w-24 h-24 rounded-full object-cover mb-5 border-4 border-cyan-400 shadow-lg" }), _jsxs("p", { className: "text-gray-100 italic mb-5 leading-relaxed", children: ["\u201C", testimonial.content, "\u201D"] }), _jsxs("div", { children: [_jsx("h3", { className: "font-bold text-lg text-cyan-300", children: testimonial.name }), _jsx("span", { className: "text-sm text-gray-300", children: testimonial.role })] })] }, testimonial.id))) })] }) }));
+};
+export default Testimonials;

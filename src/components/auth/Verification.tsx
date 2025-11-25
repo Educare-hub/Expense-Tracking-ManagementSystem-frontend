@@ -33,8 +33,8 @@ const Verification = () => {
   const [currentEmail, setCurrentEmail] = useState(emailFromURL || emailFromStorage || "");
 
   const { register, handleSubmit, formState: { errors } } = useForm<VerifyInputs>({
-    resolver: yupResolver(schema),
-  });
+  resolver: yupResolver(schema) as any,
+});
 
   // Log on mount
   React.useEffect(() => {

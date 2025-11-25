@@ -36,8 +36,8 @@ export const Register = () => {
   const navigate = useNavigate();
   
   const { register, handleSubmit, formState: { errors } } = useForm<RegisterInputs>({
-    resolver: yupResolver(schema),
-  });
+  resolver: yupResolver(schema) as any,
+});
 
   const onSubmit: SubmitHandler<RegisterInputs> = async (data) => {
     setIsLoading(true);

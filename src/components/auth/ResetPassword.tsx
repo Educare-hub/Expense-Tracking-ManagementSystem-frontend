@@ -25,8 +25,8 @@ const ResetPassword = () => {
   const email = (location.state as { email?: string })?.email || "";
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
-    resolver: yupResolver(schema),
-  });
+  resolver: yupResolver(schema) as any,
+});
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     setLoading(true);

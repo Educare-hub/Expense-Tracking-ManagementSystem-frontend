@@ -10,7 +10,6 @@ import { setAuthSuccess } from "../../features/auth/authSlice"; // ← ADDED
 import Navbar from "../nav/Navbar";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
-import type { FieldValues } from "react-hook-form";
 
 type LoginInputs = {
   email: string;
@@ -27,7 +26,7 @@ const Login = () => {
   const dispatch = useDispatch(); // ← ADDED
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm<LoginInputs>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema) as any,  // ← ONLY CHANGE: Added "as any"
   });
 
   const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
