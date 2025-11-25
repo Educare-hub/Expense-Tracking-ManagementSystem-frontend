@@ -8,7 +8,7 @@ export const Footer = () => {
       whileInView={{ opacity: 1 }}
       className="glass bg-gradient-to-t from-black via-gray-900 to-purple-900/50 border-t border-white/10 py-16"
     >
-      <div className="footer container mx-auto max-w-7xl px-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-10 text-white">
+      <div className=" text-center place-items-center footer container mx-auto max-w-7xl px-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-10 text-white">
         <nav>
           <h6 className="footer-title text-amber-400 text-xl font-bold mb-4">Services</h6>
           <a className="link link-hover text-gray-300 hover:text-amber-400">Branding</a>
