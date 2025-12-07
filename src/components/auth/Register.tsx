@@ -98,7 +98,7 @@ export const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-purple-900">
+    <div className="min-h-screen bg-linear-to-br from-black via-gray-900 to-purple-900">
       <Navbar />
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}

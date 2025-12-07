@@ -6,7 +6,7 @@ export const Footer = () => {
     <motion.footer
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
-      className="glass bg-gradient-to-t from-black via-gray-900 to-purple-900/50 border-t border-white/10 py-16"
+      className="glass bg-linear-to-t from-black via-gray-900 to-purple-900/50 border-t border-white/10 py-16"
     >
       <div className=" text-center place-items-center footer container mx-auto max-w-7xl px-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-10 text-white">
         <nav>

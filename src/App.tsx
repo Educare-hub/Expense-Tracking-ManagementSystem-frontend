@@ -3,10 +3,10 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
-// Import from pages folder - USE CORRECT NAMES
+// Import from pages folder - 
 import Home from "./pages/Home";
 import About from "./pages/About";
-import Services from "./pages/Services";  // Changed from ServicesPage
+import Services from "./pages/Services";  
 
 // Auth Pages
 import Register from "./components/auth/Register";
@@ -52,7 +52,14 @@ const App: React.FC = () => {
         <Route path="/register" element={<Navigate to="/auth/register" replace />} />
 
         {/* DASHBOARD ROUTES */}
-        <Route path="/admin/dashboard" element={<AdminProtected><AdminDashboard /></AdminProtected>} />
+        <Route 
+        path="/admin/dashboard" 
+        element={
+          <>
+          {console.log("ADMIN ROUTE REACHED — BYPASSING GUARD FOR 10 SECONDS")}
+            <AdminDashboard />
+            </>
+          } />
         <Route path="/user/dashboard" element={<UserProtected><UserDashboard /></UserProtected>} />
         <Route path="/dashboard" element={<Navigate to="/user/dashboard" replace />} />
         

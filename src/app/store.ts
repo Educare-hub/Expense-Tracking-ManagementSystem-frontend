@@ -4,6 +4,7 @@ import authReducer from "../features/auth/authSlice";
 import uiReducer from "../features/ui/uiSlice";
 import authAPI from "../features/auth/authAPI";
 import { expensesAPI } from "../features/expenses/expensesAPI";
+import { adminAPI } from "../features/admin/adminAPI";
 
 export const store = configureStore({
   reducer: {
@@ -11,13 +12,15 @@ export const store = configureStore({
     ui: uiReducer,
     [authAPI.reducerPath]: authAPI.reducer,
     [expensesAPI.reducerPath]: expensesAPI.reducer,
+    [adminAPI.reducerPath]: adminAPI.reducer, // Added adminAPI reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
     })
       .concat(authAPI.middleware)
-      .concat(expensesAPI.middleware),
+      .concat(expensesAPI.middleware)
+      .concat(adminAPI.middleware), 
 });
 
 export type AppDispatch = typeof store.dispatch;

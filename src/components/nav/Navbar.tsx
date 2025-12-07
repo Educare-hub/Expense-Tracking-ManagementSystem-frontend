@@ -28,7 +28,7 @@ const Navbar = () => {
       : "/login";
 
   return (
-    <div className="bg-gradient-to-tr from-cyan-400 via-teal-500 to-blue-600 text-white shadow-md">
+    <div className="bg-lienear-to-tr from-cyan-400 via-teal-500 to-blue-600 text-white shadow-md">
       <div className="navbar container mx-auto">
 
         {/* NAVBAR START */}
@@ -45,7 +45,7 @@ const Navbar = () => {
 
             <ul
               tabIndex={-1}
-              className="menu menu-sm dropdown-content bg-gradient-to-tr 
+              className="menu menu-sm dropdown-content bg-linear-to-tr 
                         from-cyan-400 via-teal-500 to-blue-600 text-white 
                         rounded-box z-10 mt-3 w-52 p-2 shadow"
             >

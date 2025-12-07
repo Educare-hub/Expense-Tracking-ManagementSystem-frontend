@@ -2,7 +2,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { ApiDomain } from "../../utils/ApiDomain";
 import type { RootState } from "../../app/store";
-import usersAPI from "./usersAPI";
+// import usersAPI from "./usersAPI";
 
 export type UserPayload = {
   userid?: number;

@@ -83,9 +83,9 @@ const Intro: React.FC = () => {
               alt={item.name}
               className="rounded-lg shadow-md mb-3"
             />
-            <p className="text-gray-700 italic">"{item.content}"</p>
+            <p className="text-white-700 italic">"{item.content}"</p>
             <p className="mt-2 font-semibold">{item.name}</p>
-            <p className="text-sm text-gray-500">{item.role}</p>
+            <p className="text-sm text-white-500">{item.role}</p>
           </div>
         ))}
       </div>

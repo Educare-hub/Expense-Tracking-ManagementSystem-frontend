@@ -4,9 +4,9 @@ import { testimonialsData } from "./testimonialdata";
 
 const Testimonials = () => {
   return (
-    <section className="py-20 bg-gradient-to-tr from-[#0f2027] via-[#203a43] to-[#2c5364] text-white">
+    <section className="py-20 bg-linear-to-tr from-[#257698] via-[#175a71] to-[#10688d] text-white">
       <div className="max-w-6xl mx-auto px-6">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-500 bg-clip-text text-transparent drop-shadow-lg">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 bg-linear-to-r from-cyan-300 via-blue-400 to-indigo-500 bg-clip-text text-transparent drop-shadow-lg">
           What Our Users Say
         </h2>
 

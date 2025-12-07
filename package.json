@@ -8,18 +8,20 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
-
   "engines": {
-  "node": ">=18.x"
+    "node": ">=18.x"
   },
-
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@fullcalendar/daygrid": "^6.1.19",
     "@fullcalendar/interaction": "^6.1.19",
     "@fullcalendar/react": "^6.1.19",
     "@fullcalendar/timegrid": "^6.1.19",
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^5.2.2",
+    "@mui/icons-material": "^7.3.6",
+    "@mui/material": "^7.3.6",
     "@reduxjs/toolkit": "^2.10.1",
     "@tailwindcss/vite": "^4.1.16",
     "apexcharts": "^5.3.6",
@@ -67,5 +69,4 @@
       "vite": "npm:rolldown-vite@7.1.14"
     }
   }
-  
 }

@@ -35,7 +35,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-purple-900 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-linear-to-br from-black via-gray-900 to-purple-900 flex items-center justify-center p-6">
       <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="glass-gold p-10 w-full max-w-md rounded-3xl">
         <h1 className="text-4xl font-bold text-center text-amber-400 mb-6 font-['Cinzel']">Reset Password</h1>
         <p className="text-center text-white/80 mb-8">We’ll send a 6-digit code to your email</p>

@@ -19,7 +19,7 @@ export const Services = () => {
   };
 
   return (
-    <section className="bg-gradient-to-tr from-[#0f2027] via-[#203a43] to-[#2c5364] text-white py-16 px-6 md:px-12">
+    <section className="bg-linear-to-tr from-[#0f2027] via-[#203a43] to-[#2c5364] text-white py-16 px-6 md:px-12">
       <div className="flex flex-col md:flex-row items-stretch justify-between gap-10">
         
         {/* Left - Image */}
@@ -35,7 +35,7 @@ export const Services = () => {
 
         {/* Right - Content */}
         <div className="w-full md:w-1/2 flex flex-col justify-center bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-shadow duration-500">
-          <h2 className="text-4xl font-extrabold mb-4 bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-500 bg-clip-text text-transparent">
+          <h2 className="text-4xl font-extrabold mb-4 bg-linear-to-r from-cyan-300 via-blue-400 to-indigo-500 bg-clip-text text-transparent">
             Our Services
           </h2>
           <p className="mb-6 text-gray-200 text-lg leading-relaxed">
@@ -80,7 +80,7 @@ export const Services = () => {
           {/* CTA Button */}
           <button 
             onClick={handleGetStarted}
-            className="mt-6 px-6 py-3 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-full font-semibold text-white shadow-lg hover:scale-105 transition-transform duration-300"
+            className="mt-6 px-6 py-3 bg-linear-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-full font-semibold text-white shadow-lg hover:scale-105 transition-transform duration-300"
           >
             {token ? "Go to Dashboard" : "Get Started"}
           </button>

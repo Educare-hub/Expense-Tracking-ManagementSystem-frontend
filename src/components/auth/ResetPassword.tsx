@@ -50,7 +50,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-purple-900 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-linear-to-br from-black via-gray-900 to-purple-900 flex items-center justify-center p-6">
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}

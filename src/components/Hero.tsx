@@ -20,11 +20,11 @@ export const Hero = () => {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row justify-between items-stretch gap-10 min-h-[80vh] p-6 md:p-12 bg-gradient-to-tr from-[#0f2027] via-[#203a43] to-[#2c5364] text-white">
+      <div className="flex flex-col md:flex-row justify-between items-stretch gap-10 min-h-[80vh] p-6 md:p-12 bg-linear-to-tr from-[#0f2027] via-[#203a43] to-[#2c5364] text-white">
         
         {/* Left Section */}
         <div className="w-full md:w-1/2 flex flex-col justify-center bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-shadow duration-500">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-6 bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-500 bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-6 bg-linear-to-r from-cyan-300 via-blue-400 to-indigo-500 bg-clip-text text-transparent">
             Welcome to ExpensePro!
           </h1>
           <p className="mb-4 text-lg leading-relaxed text-gray-200">
@@ -41,7 +41,7 @@ export const Hero = () => {
 
           <button 
             onClick={handleGetStarted}
-            className="self-start px-6 py-3 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-full font-semibold text-white shadow-lg hover:scale-105 transition-transform duration-300"
+            className="self-start px-6 py-3 bg-linear-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-full font-semibold text-white shadow-lg hover:scale-105 transition-transform duration-300"
           >
             {token ? "Go to Dashboard" : "Get Started"}
           </button>
