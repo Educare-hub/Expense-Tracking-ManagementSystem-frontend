@@ -6,27 +6,27 @@ const api = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
-// ✅ REQUEST INTERCEPTOR - Attach token to every request
+// REQUEST INTERCEPTOR - Attach token to every request
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("expensepro_token");
     
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
-      console.log("🔑 Token attached to request:", token.substring(0, 20) + "...");
+      console.log("Token attached to request:", token.substring(0, 20) + "...");
     } else {
-      console.log("⚠️ No token found in localStorage");
+      console.log("No token found in localStorage");
     }
     
     return config;
   },
   (error) => {
-    console.error("❌ Request interceptor error:", error);
+    console.error("Request interceptor error:", error);
     return Promise.reject(error);
   }
 );
 
-// ✅ RESPONSE INTERCEPTOR - Handle 401 errors (token expired/invalid)
+// RESPONSE INTERCEPTOR - Handle 401 errors (token expired/invalid)
 api.interceptors.response.use(
   (response) => {
     // Just return successful responses
@@ -34,7 +34,7 @@ api.interceptors.response.use(
   },
   (error) => {
     if (error.response?.status === 401) {
-      console.error("🚫 Unauthorized! Token invalid or expired");
+      console.error("Unauthorized! Token invalid or expired");
       
       // Clear invalid auth data
       localStorage.removeItem("expensepro_token");

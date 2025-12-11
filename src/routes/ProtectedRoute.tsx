@@ -10,7 +10,7 @@ type Props = { requiredRole?: "admin" | "user" };
 const ProtectedRoute: React.FC<Props> = ({ requiredRole }) => {
   const { token, user, loading } = useSelector((s: RootState) => s.auth);
 
-  if (loading) return null; // or a loader component
+  if (loading) return null; 
   if (!token || !user) return <Navigate to="/auth/login" replace />;
 
   if (requiredRole && user.role !== requiredRole) {

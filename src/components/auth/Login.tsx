@@ -5,8 +5,8 @@ import * as yup from "yup";
 import api from "../../api/client";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux"; // ← ADDED
-import { setAuthSuccess } from "../../features/auth/authSlice"; // ← ADDED
+import { useDispatch } from "react-redux"; 
+import { setAuthSuccess } from "../../features/auth/authSlice"; 
 import Navbar from "../nav/Navbar";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
@@ -23,10 +23,10 @@ const schema = yup.object({
 
 const Login = () => {
   const [message, setMessage] = useState("");
-  const dispatch = useDispatch(); // ← ADDED
+  const dispatch = useDispatch(); 
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm<LoginInputs>({
-    resolver: yupResolver(schema) as any,  // ← ONLY CHANGE: Added "as any"
+    resolver: yupResolver(schema) as any,  
   });
 
   const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
@@ -40,17 +40,14 @@ const Login = () => {
         return;
       }
 
-      // Already verified → SUCCESS LOGIN
+      // verified  
       if (res.data.token && res.data.user) {
         // Save to localStorage
         localStorage.setItem("expensepro_token", res.data.token);
         localStorage.setItem("role", res.data.user.role.toLowerCase());
-        // After successful login — ADD THIS LINE
         localStorage.setItem("token", res.data.token);
         console.log("TOKEN SAVED:", res.data.token);
 
-
-        // Update Redux state IMMEDIATELY
         dispatch(setAuthSuccess({
           token: res.data.token,
           user: res.data.user
@@ -66,7 +63,11 @@ const Login = () => {
         }
       }
     } catch (err: any) {
-      const errorMsg = err.response?.data?.error || err.response?.data?.message || "Invalid email or password";
+      // FIXED: Show toast errors instead of just setting message
+      const errorMsg = err.response?.data?.error || 
+                       err.response?.data?.message || 
+                       "Invalid email or password";
+      
       toast.error(errorMsg);
       setMessage(errorMsg);
     }

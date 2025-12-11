@@ -15,6 +15,6 @@ export default function AdminProtected({ children }: { children: ReactNode }) {
     return <Navigate to="/user/dashboard" replace />;
   }
 
-  // Everything is good → render the admin dashboard
+  // In my case if everything is good → render the admin dashboard
   return <>{children}</>;
 }

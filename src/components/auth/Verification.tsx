@@ -108,14 +108,17 @@ const Verification = () => {
     } catch (err: any) {
       console.error("Verification error:", err.response?.data);
       
-      const errorMsg = err.response?.data?.message || err.response?.data?.error;
+      const errorMsg = err.response?.data?.error || err.response?.data?.message;
       
-      if (errorMsg?.toLowerCase().includes("expired")) {
+      // Show specific error toasts
+      if (err.response?.status === 400) {
+        toast.error(errorMsg || "Invalid verification code. Please check and try again.");
+      } else if (errorMsg?.toLowerCase().includes("expired")) {
         toast.error("Code expired. Click 'Resend Code' below.");
       } else if (errorMsg?.toLowerCase().includes("invalid")) {
         toast.error("Invalid code. Please check and try again.");
       } else {
-        toast.error(errorMsg || "Verification failed");
+        toast.error(errorMsg || "Verification failed. Please try again.");
       }
     } finally {
       setIsLoading(false);
@@ -187,7 +190,7 @@ const Verification = () => {
                 type="email"
                 value={manualEmail}
                 onChange={(e) => setManualEmail(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSaveManualEmail()}
+                onKeyDown={(e) => e.key === 'Enter' && handleSaveManualEmail()}
                 placeholder="your@email.com"
                 className="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-amber-400 mb-3"
                 autoFocus

@@ -36,8 +36,8 @@ export const Register = () => {
   const navigate = useNavigate();
   
   const { register, handleSubmit, formState: { errors } } = useForm<RegisterInputs>({
-  resolver: yupResolver(schema) as any,
-});
+    resolver: yupResolver(schema) as any,
+  });
 
   const onSubmit: SubmitHandler<RegisterInputs> = async (data) => {
     setIsLoading(true);
@@ -71,21 +71,25 @@ export const Register = () => {
       navigate(verifyURL);
 
     } catch (err: any) {
-      // DEBUG: Log the ENTIRE error
+      // FIXED: Enhanced error handling with proper toasts
       console.error("Registration FAILED - Full error:", {
         status: err.response?.status,
         data: err.response?.data,
         message: err.message
       });
       
-      console.error("Registration error:", err.response?.data);
-      
       const backendMessage = err.response?.data?.error || err.response?.data?.message;
 
-      // Handle specific error cases
-      if (backendMessage?.toLowerCase().includes("already exists") || 
-          backendMessage?.toLowerCase().includes("duplicate") || 
-          backendMessage?.toLowerCase().includes("unique")) {
+      // Handle specific error cases with toasts
+      if (err.response?.status === 413) {
+        toast.error("Input too long! Check your email, password, or name length.");
+      } else if (err.response?.status === 409) {
+        toast.error("This email is already registered. Please log in instead.");
+      } else if (err.response?.status === 400) {
+        toast.error(backendMessage || "Invalid input. Please check your information.");
+      } else if (backendMessage?.toLowerCase().includes("already exists") || 
+                 backendMessage?.toLowerCase().includes("duplicate") || 
+                 backendMessage?.toLowerCase().includes("unique")) {
         toast.error("This email is already registered. Please log in instead.");
       } else if (backendMessage) {
         toast.error(backendMessage);
@@ -98,7 +102,7 @@ export const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-black via-gray-900 to-purple-900">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-purple-900">
       <Navbar />
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
